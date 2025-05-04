@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.game-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.player-side, .cpu-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.choice {
+    width: 100px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+}
+.compChoice {
+    width: 100px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.choice.selected {
+    border: 4px solid #007bff;
+    border-radius: 8px;
+}
+
+.choice.glow {
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.8);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(0, 123, 255, 1);
+    }
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 1.5em;
+    color: #555;
+}

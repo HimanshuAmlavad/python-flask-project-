@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rock Paper Scissors</h1>
+        <div class="game-area">
+            <!-- Player Side -->
+            <div class="player-side">
+                <h2>Player</h2>
+                <a href="?id={{ id }}&choice=rock"><img src="/static/rock.png" id="player-rock" class="choice user {{'glow' if user_input == 'rock' else ''}}" alt="Rock" onclick="makeChoice('rock')"></a>
+                <a href="?id={{ id }}&choice=paper"><img src="/static/paper.png" id="player-paper" class="choice user {{'glow' if user_input == 'paper' else ''}}" alt="Paper" onclick="makeChoice('paper')"></a>
+               <a href="?id={{ id }}&choice=scissor"><img src="/static/scissors.png" id="player-scissors" class="choice user {{'glow' if user_input == 'scissor' else ''}}" alt="Scissors" onclick="makeChoice('scissors')"></a>
+            </div>
+            <!-- CPU Side -->
+            <div class="cpu-side">
+                <h2>CPU</h2>
+                <img src="/static/rock.png" id="cpu-rock" class="choice {{'glow' if cpu_ans == 'rock' else ''}}" alt="Rock">
+                <img src="/static/paper.png" id="cpu-paper" class="choice {{'glow' if cpu_ans == 'paper' else ''}}" alt="Paper">
+                <img src="/static/scissors.png" id="cpu-scissors" class="choice {{'glow' if cpu_ans == 'scissor' else ''}}" alt="Scissors">
+            </div>
+        </div>
+        <div id="result">
+            {% if result %}
+            <h2>Result: <span id="result-text">{{ result }}</span></h2>
+            {% else %}
+            <h2>Result: <span id="result-text">Make a choice!</span></h2>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        function makeChoice(choice){
+            if(choice == 'rock' ){
+                let ele = document.querry
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 from mysql import connector
 from uuid import uuid4
 
-class db_function:
+class Database:
     def __init__(self, email, password):
         self.email = email
         self.password = password
@@ -57,7 +57,7 @@ class db_function:
 
 
 if __name__ == "__main__":
-    initilise = db_function(email="jagat69133@prorsd.com", password="him")
+    initilise = Database(email="jagat69133@prorsd.com", password="him")
     # initilise.show_database()
     initilise.show_details()
     

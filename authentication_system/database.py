@@ -20,29 +20,47 @@ class db_function:
         );
         """)
     def check_email(self):
-        querry = "SELECT count(*) FROM user WHERE user_email != %s"    
+        query = "SELECT user_email FROM user WHERE user_email = %s;"    
         value =(self.email,)
 
-        self.mycursor.execute(querry,value)
-        result = self.mycursor.fetchone()[0]
-
-        return result == 0
+        self.mycursor.execute(query,value)
+        result = self.mycursor.fetchone()
+        if result:
+            if result[0] == self.email:
+                return True
+        return False
+    
     def insert_detail(self):
         user_id = str(uuid4())
 
-        querry = "INSERT INTO user(user_id, user_email, user_password) VALUES(%s, %s, %s);"
+        query = "INSERT INTO user(user_id, user_email, user_password) VALUES(%s, %s, %s);"
         value =  (user_id, self.email, self.password)
 
-        self.mycursor.execute(querry,value)
+        self.mycursor.execute(query,value)
+        self.mydb.commit()
         print( self.mycursor.execute("SELECT * FROM user;"))
 
+    def check_password(self):
+        query = "SELECT user_password FROM user WHERE user_password = %s"
+        value = (self.password,)
+
+        self.mycursor.execute(query,value)
+        result = self.mycursor.fetchone()
+
+        if result[0] == self.password:
+            return True
+        return False
+    # def show_details(self):
+    #     print(self.mycursor.execute("select * from user;"))
 
 
 
 
 if __name__ == "__main__":
-    initilise = db_function()
-    initilise.show_database()
+    initilise = db_function(email="jagat69133@prorsd.com", password="him")
+    # initilise.show_database()
+    initilise.show_details()
+    
 
     # def show_database(self):
     #     print("data base")

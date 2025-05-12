@@ -54,6 +54,15 @@ def signup():
     else:
     
         return render_template('sign-up.html')
+@app.route("/forgot-password", methodes=["GET","POST"])
+def forgot_password():
+    email = request.form.get("email")
+    new_password = request.form.get("password")
+
+    db_obj = Database(email= email, password=new_password)
+    if not db_obj.check_email():
+        pass
+    return render_template('forgot-password.html', message="account with this email not exist")
 
 @app.route("/product")
 def product():

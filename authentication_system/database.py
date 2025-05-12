@@ -1,5 +1,6 @@
 from mysql import connector
 from uuid import uuid4
+from datetime import datetime, timedelta
 
 class Database:
     def __init__(self, email, password):
@@ -17,6 +18,17 @@ class Database:
             user_id  varchar(36) unique not null,
             user_email varchar(50) unique not null,
             user_password varchar(50)
+        );
+        """)
+
+        self.mycursor.execute(""" 
+        CREATE TABLE reset_password (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email VARCHAR(50) UNIQUE NOT NULL,
+            new_password VARCHAR(50),
+            reset_token TEXT NOT NULL,
+            token_expiry TIMESTAMP NOT NULL,
+            is_used BOOLEAN DEFAULT FALSE
         );
         """)
     def check_email(self):
@@ -50,11 +62,18 @@ class Database:
         if result[0] == self.password:
             return True
         return False
+    def reset_password(self):
+        token = str(uuid4())
+        expiry = datetime.now + timedelta(hours=24)
+
+        query =" INSERT INTO reset_password(email, new_password, reset_token, token_expiry) VALUES(%s,%s,%s,%s)"
+        values = (self.email, self.password,token,expiry)
+        self.mycursor.execute()
+
+
+
     # def show_details(self):
     #     print(self.mycursor.execute("select * from user;"))
-
-
-
 
 if __name__ == "__main__":
     initilise = Database(email="jagat69133@prorsd.com", password="him")

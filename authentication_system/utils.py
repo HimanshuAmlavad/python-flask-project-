@@ -1,8 +1,10 @@
 import re
+
+
 def not_valid_password(password):
     if len(password) < 8:
         return "Password atleast contain 8 character"
-    if not re.search(r"[A-Z]",password):
+    if not re.search(r"[A-Z]", password):
         return "password should atleast contain upper case"
     if not re.search(r"[a-z]", password):
         return "password should atleast contain lower case"

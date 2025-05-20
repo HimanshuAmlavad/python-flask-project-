@@ -89,6 +89,45 @@ class Database:
         self.mycursor.execute(query, values)
         self.mydb.commit()
 
+    def verify_token(self, token):
+        # Get token and its expiry time if token matches
+        query = "SELECT token_expiry FROM reset_password WHERE reset_token = %s"
+        values = (token,)
+        self.mycursor.execute(query, values)
+        result = self.mycursor.fetchone()
+
+        if result:
+            stored_time = result[0]  # Get stored expiry time
+            current_time = datetime.now()
+            time_difference = stored_time - current_time
+
+            # Check if time difference is less than 1 hour
+            if time_difference.total_seconds() > 0:
+                return True
+        return False
+    
+    def update_password(self, token):
+        try:
+            query = """SELECT user_id FROM reset_passwordWHERE reset_token = %s """
+
+            self.mycursor.execute(query, (token))
+            result = self.mycursor.fetchone()
+
+            if not result:
+                return False
+            
+            query = "UPDATE user SET user_password = %s WHERE id =%s"
+            self.mycursor.execute(query,(self.password, result[0]))
+
+            query = "DELET FROM reset_password WHERE reset_token =%s"
+            self.mycursor.execute(query,(token,))
+
+            self.mydb.commit()
+            return True
+        except Exception as e:
+            print(f"Error updating password: {e}")
+            return False
+
     # def show_details(self):
     #     print(self.mycursor.execute("select * from user;"))
 

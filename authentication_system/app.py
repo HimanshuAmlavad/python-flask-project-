@@ -75,16 +75,20 @@ def signup():
 @app.route("/forgot-password", methods=["POST", "GET"])
 def forgot_password():
     if request.method == "POST":
+        print("1")
         email = request.form.get("email")
+        print("2")
 
         token = secrets.token_urlsafe(50)
 
         db_obj = Database(email=email, password=None)
+        print("3")
         if db_obj.check_email():
             db_obj.reset_password(token)
             email_obj = EmailService()
 
             if email_obj.send_reset_email(receiver_email=email, reset_token=token):
+                print("3")
                 return render_template("email.html", message="email sent")
             return render_template("email.html", message="email not sent")
 
@@ -96,8 +100,18 @@ def forgot_password():
 
 @app.route("/forgot-password/<string:token>", methods=["POST", "GET"])
 def token_verification(token):
-    pass
-
+    if request.method == 'GET':
+        db_obj = Database(email=None, password=None)
+        if db_obj.verify_token(token):
+            return render_template("password.html")
+        return render_template("email.html", message='Invalid token or expired')
+    
+    if request.method == 'POST':
+        password = request.form.get('password')
+        db_obj = Database(email=None, password=password)
+        if db_obj.update_password(token):
+            return redirect("/login")
+        return render_template("password.html", message="Error resetting password")
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

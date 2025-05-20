@@ -5,8 +5,8 @@ from email.mime.text import MIMEText
 
 class EmailService:
     def __init__(self):
-        self.sender_email = ""  # Replace with your email
-        self.email_password = ""  # Replace with Gmail App Password
+        self.sender_email = "authentication.py@gmail.com"  # Replace with your email
+        self.email_password = "ttip vzbb nuqr mkpr"  # Replace with Gmail App Password
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
 
@@ -54,4 +54,4 @@ class EmailService:
 
 if __name__ == "__main__":
     boj = EmailService()
-    print(boj.send_reset_email("himanshuamlavad@gmail.com", "token.yyyy"))
+    print(boj.send_reset_email("himanshuamlavad2002@gmail.com", "token.yyyy"))

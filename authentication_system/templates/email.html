@@ -27,7 +27,7 @@
             width: 20vw;
             display: grid;
             gap: 10px;
-            justify-items: center;
+            justify-content: center;
             align-content: center;
 
         }
@@ -48,22 +48,8 @@
         button {
             width: 10vw;
             height: 4vh;
-        }
-
-        #show-password {
-            display: inline-flex;
-            gap: 10px;
-            width: auto;
-            height: auto;
-            margin-left: 5px;
-        }
-
-        #checkbox {
-            width: 100%;
-        }
-
-        #checkbox>span {
-            margin-left: 2.5vw;
+            background-color: blue;
+            color: white;
         }
 
         p {
@@ -82,13 +68,15 @@
 
 
             <span>
-                <button type="button">Send Email</button>
+                <button type="submit">Send Link</button>
                 {% if message %}
                 <p style="color: rgb(211, 0, 0);">{{ message }}</p>
                 {% endif %}
                 <p>
-                    The link will be send on provided email
+                    The link will be send
+                     on provided email
                 </p>
+            </span>    
         </form>
     </div>
 

@@ -75,26 +75,42 @@ def signup():
 @app.route("/forgot-password", methods=["POST", "GET"])
 def forgot_password():
     if request.method == "POST":
-        print("1")
-        email = request.form.get("email")
-        print("2")
+        try:
+            email = request.form.get("email")
+            if not email:
+                return render_template("email.html", message="Email is required")
+            
+            print(f"Processing reset request for email: {email}")
+            
+            token = secrets.token_urlsafe(50)
+            print(f"Generated token: {token}")
 
-        token = secrets.token_urlsafe(50)
-
-        db_obj = Database(email=email, password=None)
-        print("3")
-        if db_obj.check_email():
-            db_obj.reset_password(token)
+            db_obj = Database(email=email, password=None)
+            if not db_obj.check_email():
+                print(f"Email {email} not found in database")
+                return render_template("email.html", message="Account with this email does not exist")
+            
+            # Store token in database
+            token_stored = db_obj.reset_password(token)
+            if not token_stored:
+                print("Failed to store token in database")
+                return render_template("email.html", message="Error generating reset token")
+            
+            # Send email
             email_obj = EmailService()
+            email_sent = email_obj.send_reset_email(receiver_email=email, reset_token=token)
+            
+            if email_sent:
+                print(f"Reset email sent successfully to {email}")
+                return render_template("email.html", message="Reset link sent to your email")
+            else:
+                print("Failed to send reset email")
+                return render_template("email.html", message="Error sending email")
+                
+        except Exception as e:
+            print(f"Error in forgot_password: {str(e)}")
+            return render_template("email.html", message="An error occurred")
 
-            if email_obj.send_reset_email(receiver_email=email, reset_token=token):
-                print("3")
-                return render_template("email.html", message="email sent")
-            return render_template("email.html", message="email not sent")
-
-        return render_template(
-            "email.html", message="account with this email not exist"
-        )
     return render_template("email.html")
 
 
@@ -103,15 +119,20 @@ def token_verification(token):
     if request.method == 'GET':
         db_obj = Database(email=None, password=None)
         if db_obj.verify_token(token):
-            return render_template("password.html")
+            return render_template("password.html", token=token)  # Pass token to template
         return render_template("email.html", message='Invalid token or expired')
     
     if request.method == 'POST':
         password = request.form.get('password')
+        not_valid_message = not_valid_password(password)
+        
+        if not_valid_message:
+            return render_template("password.html", message=not_valid_message, token=token)
+            
         db_obj = Database(email=None, password=password)
         if db_obj.update_password(token):
-            return redirect("/login")
-        return render_template("password.html", message="Error resetting password")
+            return redirect("/login", message="Password reset successfilly")
+        return render_template("password.html", message="Error resetting password", token=token)
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

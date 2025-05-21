@@ -5,8 +5,8 @@ from email.mime.text import MIMEText
 
 class EmailService:
     def __init__(self):
-        self.sender_email = "authentication.py@gmail.com"  # Replace with your email
-        self.email_password = "ttip vzbb nuqr mkpr"  # Replace with Gmail App Password
+        self.sender_email = "@gmail.com"  # Replace with your email
+        self.email_password = ""  # Replace with Gmail App Password
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587
 
@@ -20,14 +20,14 @@ class EmailService:
         # Create email body
         body = f"""
         Hello,
-        
+
         You have requested to reset your password.
         Click the link below to reset your password:
-        
-        http://localhost:5000/email/{reset_token}
-        
+
+        http://127.0.0.1:8000/forgot-password/{reset_token}  # Changed port to 8000
+
         If you did not request this, please ignore this email.
-        
+
         This link will expire in 1 hours.
         """
 

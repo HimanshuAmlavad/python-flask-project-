@@ -81,6 +81,7 @@ class Database:
         self.mycursor.execute(query, values)
         result = self.mycursor.fetchone()
         if not result:
+            print("id not fatched")
             return None
 
         user_table_id = result[0]
@@ -88,6 +89,7 @@ class Database:
         values = (user_table_id, token, expiry)
         self.mycursor.execute(query, values)
         self.mydb.commit()
+        return True
 
     def verify_token(self, token):
         # Get token and its expiry time if token matches
@@ -104,26 +106,34 @@ class Database:
             # Check if time difference is less than 1 hour
             if time_difference.total_seconds() > 0:
                 return True
+       
         return False
     
     def update_password(self, token):
         try:
-            query = """SELECT user_id FROM reset_passwordWHERE reset_token = %s """
-
-            self.mycursor.execute(query, (token))
+            # Get user_id using token
+            query = """
+            SELECT user_id FROM reset_password 
+            WHERE reset_token = %s AND token_expiry > NOW()
+            """
+            self.mycursor.execute(query, (token,))
             result = self.mycursor.fetchone()
-
-            if not result:
-                return False
             
-            query = "UPDATE user SET user_password = %s WHERE id =%s"
-            self.mycursor.execute(query,(self.password, result[0]))
-
-            query = "DELET FROM reset_password WHERE reset_token =%s"
-            self.mycursor.execute(query,(token,))
-
-            self.mydb.commit()
-            return True
+            if result:
+                user_id = result[0]
+                # Update password
+                update_query = "UPDATE user SET user_password = %s WHERE id = %s"
+                self.mycursor.execute(update_query, (self.password, user_id))
+                
+                # Delete used token
+                delete_query = "DELETE FROM reset_password WHERE reset_token = %s"
+                self.mycursor.execute(delete_query, (token,))
+                
+                self.mydb.commit()
+                return True
+                
+            return False
+            
         except Exception as e:
             print(f"Error updating password: {e}")
             return False

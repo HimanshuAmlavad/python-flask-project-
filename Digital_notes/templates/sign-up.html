@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign-up</title>
+    <style>
+      body {
+        background-color: rgb(30, 30, 30);
+      }
+
+      .container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      form {
+        border: 1px solid rgb(92, 86, 86);
+        background-color: rgb(15, 15, 15);
+        box-shadow: 5px;
+        border-radius: 1cm;
+        height: 40vh;
+        width: 20vw;
+        display: grid;
+        gap: 5px;
+        justify-items: center;
+        align-content: center;
+      }
+
+      input {
+        display: block;
+        height: 3vh;
+        width: 15vw;
+        color: aliceblue;
+        background-color: rgb(38, 37, 37);
+      }
+
+      label {
+        color: white;
+      }
+
+      button {
+        width: 10vw;
+        height: 4vh;
+        background-color: blue;
+        color: white;
+      }
+      .center {
+        justify-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <form method="POST" action="/signup">
+        <span>
+          <label for="email">Email</label>
+          <input value="{{ email }}" id="email" type="email" name="email" required />
+        </span>
+        <span>
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            minlength="8"
+            required
+          />
+        </span>
+        <span>
+          <label for="re-password">Re-password</label>
+          <input
+            type="password"
+            id="re-password"
+            name="re-password"  
+            minlength="8"
+            required
+          />
+        </span>
+        <span class="center">
+          <button type="submit">Sign up</button>
+          {% if message %}
+          <p style="color: rgb(211, 0, 0)">{{ message }}</p>
+          {% endif %}
+          <p style="color: rgb(159, 159, 159)">
+            Already have an account <a href="/login">login</a>
+          </p>
+        </span>
+      </form>
+    </div>
+  </body>
+</html>

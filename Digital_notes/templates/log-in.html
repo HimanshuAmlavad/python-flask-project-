@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>log-in</title>
+    <style>
+        body {
+            background-color: rgb(30, 30, 30);
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            border: 1px solid rgb(99, 95, 95);
+            background-color: rgb(15, 15, 15);
+            box-shadow: 5px;
+            border-radius: 1cm;
+            height: 45vh;
+            width: 20vw;
+            display: grid;
+            gap: 10px;
+            justify-items: center;
+            align-content: center;
+
+        }
+
+        input {
+            display: block;
+            height: 3vh;
+            width: 15vw;
+            margin: 0;
+            color: aliceblue;
+            background-color: rgb(38, 37, 37);
+        }
+
+        label {
+            color: white;
+        }
+
+        button {
+            width: 10vw;
+            height: 4vh;
+            background-color: blue;
+            color: white;
+        }
+
+        #show-password {
+            display: inline-flex;
+            gap: 10px;
+            width: auto;
+            height: auto;
+            margin-left: 5px;
+        }
+
+        #checkbox {
+            width: 100%;
+        }
+        #checkbox > span {
+            margin-left: 2.5vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form method="POST" action="/login">
+            <span>
+                <label for="email">Email</label>
+                <input value="{{ email }}" id="email" type="email" name="email" required>
+            </span>
+            <span>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength="8" required>
+            </span>
+            <div id="checkbox">
+                <span>
+                    <label for="show-password">show password</label>
+                    <input type="checkbox" id="show-password" onclick="showPassword()">
+                </span>
+            </div>
+            <span>
+                <button type="submit">login</button>
+            </span>
+            <a style="color: rgb(159, 159, 159);" href="/forgot-password">Forgot password?</a>
+            {% if message %}
+            <p style="color: rgb(211, 0, 0);">{{ message }}</p>
+            {% endif %}
+            <p style="color: rgb(159, 159, 159);">Create account <a href="/signup">Sign-up</a></p>
+        </form>
+    </div>
+
+    <script>
+        function showPassword() {
+            const ele = document.getElementById("password");
+
+            if (ele.type == "password") {
+                ele.type = "text";
+            }
+            else {
+                ele.type = "password";
+            }
+        }
+    </script>
+</body>
+
+
+</html>

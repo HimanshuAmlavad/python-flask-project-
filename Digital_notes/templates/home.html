@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgb(33, 33, 33);
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .buttonContainear {
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            border: 1px solid rgb(99, 95, 95);
+            background-color: rgb(15, 15, 15);
+            box-shadow: 5px;
+            border-radius: 1cm;
+            height: 30vh;
+            width: 20vw;
+            gap: 10px;
+        }
+
+        button{
+            background-color: blue;
+            color: white;
+            height: 5vh;
+            width: 5vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="buttonContainear">
+            <button type="button" onclick="window.location.href='/signup'">signup</button>
+            <button type="button" onclick="window.location.href='/login'" >login</button>
+        </div>
+    </div>
+</body>
+
+</html>

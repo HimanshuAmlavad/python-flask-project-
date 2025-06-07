@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Notes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body{
+            background-color: black;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+        }
+
+        .notes-form {
+            border: 1px solid rgb(99, 95, 95);
+            background-color: rgb(15, 15, 15);
+            box-shadow: 5px;
+            border-radius: 10px;
+            height: 10vh;
+            width: 90vw;
+            display: grid;
+            gap: 10px;
+            justify-content: center;
+            align-content: center;
+
+        }
+
+        input {
+           
+            height: 5vh;
+            width: 75vw;
+            margin: 0;
+            color: aliceblue;
+            background-color: rgb(38, 37, 37);
+        }
+
+        button {
+            width: 10vw;
+            height: 6vh;
+            background-color: blue;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Notes Creation Form -->
+        <div class="notes-form">
+            <form action="{{ url_for('notes') }}" method="POST">
+                <input type="text" name="task" id="taskInput" placeholder="Add a new task...">
+                <button type="submit">Add Note</button>
+            </form>
+        </div>
+
+        <!-- Notes Display Section -->
+        <div class="notes-list">
+            {% for note in notes %}
+            <div class="note-item">
+                <p>{{ note.content }}</p>
+                <a href="{{ url_for('delete_note', note_id=note.id) }}" class="delete-btn">Delete</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -14,8 +14,8 @@ class Database:
 
         self.mycursor = self.mydb.cursor()
 
-        self.mycursor.execute("create database if not exists authentication;")
-        self.mycursor.execute("use authentication")
+        self.mycursor.execute("create database if not exists Digital_notes;")
+        self.mycursor.execute("use Digital_notes")
         self.mycursor.execute(
             """
         create table if not exists user(
@@ -38,6 +38,17 @@ class Database:
         );
         """
         )
+
+        self.mycursor.execute(
+            """
+        CREATE TABLE IF NOT EXISTS notes (
+        note_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id VARCHAR(36) NOT NULL,
+        task TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES user(user_id)
+        );
+        """)
 
     def check_email(self):
         query = "SELECT user_email FROM user WHERE user_email = %s;"
@@ -137,14 +148,64 @@ class Database:
         except Exception as e:
             print(f"Error updating password: {e}")
             return False
+        
+    def get_user_id(self, email):
+        query = "select user_id from user where user_email = %s"
+        value = (email,)
+        self.mycursor.execute(query, value)
+        result = self.mycursor.fetchone()  # Fetch the result
+        if result:
+            # print(f"User ID: {result[0]}")  # Print the user_id
+            return result[0]
+        return None
+        
+    def add_notes(self, user_id, task):
+        try:
+            query = "INSERT INTO notes (user_id, task) VALUES (%s, %s)"
+            values = (user_id, task)
+            self.mycursor.execute(query, values)
+            self.mydb.commit()
+            print(f"Note added successfully: user_id={user_id}, task={task}")
+            return True
+        except Exception as e:
+            print(f"Error adding note: {e}")
+            self.mydb.rollback()
+            return False
 
+    def get_user_notes(self, user_id):
+        query = "SELECT note_id, task FROM notes WHERE user_id = %s ORDER BY created_at DESC"
+        self.mycursor.execute(query, (user_id,))
+        notes = self.mycursor.fetchall()
+        notes_list = []
+        for note in notes:
+            notes_list.append({
+                'id': note[0],
+                'task': note[1]   # This is the note content
+                
+            })
+        return notes_list
+    
+    def delete_note(self, note_id, user_id):
+        try:
+            query = "DELETE FROM notes WHERE note_id = %s AND user_id = %s"
+            values = (note_id, user_id)
+            self.mycursor.execute(query, values)
+            self.mydb.commit()
+            return True
+        except Exception as e:
+            print(f"Error deleting note: {e}")
+            return False
     # def show_details(self):
-    #     print(self.mycursor.execute("select * from user;"))
+    #     self.mycursor.execute("select * from user")
+    #     results = self.mycursor.fetchall()  # Fetch the results
+    #     print(results)
 
 
 if __name__ == "__main__":
     initilise = Database(email="jagat69133@prorsd.com", password="him")
-    # initilise.show_database()
+    # # initilise.insert_detail()
+    # initilise.get_user_id(email="jagat69133@prorsd.com")
+    # initilise.show_details()
     #initilise.show_details()
 
     # def show_database(self):
